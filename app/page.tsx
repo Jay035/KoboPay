@@ -1,151 +1,205 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Navbar from '@/components/Navbar';
-import Hero from '@/components/Hero';
-import PaymentModal from '@/components/PaymentModal';
-import { Disco } from '@/types';
-import { Smartphone, Clock, CreditCard, Zap, Gift, Headphones, Phone } from 'lucide-react';
-import Image from 'next/image';
-import Link from 'next/link';
+import { useState } from "react";
+import Head from "next/head";
+import { 
+  Zap, 
+  CreditCard, 
+  Clock, 
+  BarChart3, 
+  Gift, 
+  Headphones, 
+  Check, 
+  Menu,
+  Phone
+} from "lucide-react";
+import PaymentModal from "@/components/PaymentModal";
+import Navbar from "@/components/Navbar";
 
-// Configuration Data
-const DISCOS: Disco[] = [
-  { id: 'aba', name: 'Aba Power', logo: '/logos/aba.png', color: 'bg-red-600' },
-  { id: 'phedc', name: 'PHEDC', logo: '/logos/phedc.png', color: 'bg-green-600' },
-  { id: 'eedc', name: 'EEDC', logo: '/logos/eedc.png', color: 'bg-yellow-600' },
+// Data Models
+const DISCOS = [
+  { id: 1, name: "Aba Power", color: "bg-red-600" },
+  { id: 2, name: "PHEDC", color: "bg-orange-500" },
+  { id: 3, name: "EEDC", color: "bg-green-600" },
 ];
 
 const BENEFITS = [
-  { title: 'Convenience', desc: 'Purchase electricity units anywhere at anytime 24/7.', icon: Clock },
-  { title: 'Flexible Payment', desc: 'Kobopay provides you with different payment options.', icon: CreditCard },
-  { title: 'Instant Token', desc: 'Your tokens are delivered to you within seconds.', icon: Zap },
-  { title: 'Track Spending', desc: 'Get detailed transaction receipts for your electricity expenses.', icon: Smartphone },
-  { title: 'Rewards', desc: 'Get rewarded with amazing gifts for buying on Kobopay.', icon: Gift },
-  { title: 'Premium Support', desc: 'Our customer service team is always available to help.', icon: Headphones },
+  { title: "Convenience", desc: "Purchase electricity units anywhere at anytime 24/7.", icon: Clock },
+  { title: "Flexible Payment", desc: "Different payment options making payment easier.", icon: CreditCard },
+  { title: "Instant Token", desc: "Your tokens are delivered to you within seconds.", icon: Zap },
+  { title: "Track Spending", desc: "Get detailed transaction receipts for expenses.", icon: BarChart3 },
+  { title: "Rewards", desc: "Get rewarded with amazing gifts for buying tokens.", icon: Gift },
+  { title: "Premium Support", desc: "Customer service team is always available.", icon: Headphones },
 ];
 
 export default function Home() {
-  const [selectedDisco, setSelectedDisco] = useState<Disco | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const handleDiscoClick = (disco: Disco) => {
-    setSelectedDisco(disco);
-    setIsModalOpen(true);
-  };
+  const [selectedDisco, setSelectedDisco] = useState<string | null>(null);
 
   return (
-    <main className="min-h-screen bg-white font-sans text-gray-900 selection:bg-blue-100">
-      <Navbar />
-      <Hero />
+    <div className="min-h-screen bg-black text-gray-100 font-sans selection:bg-blue-500 selection:text-white">
+      <Head>
+        <title>Kobopay | Instant Electricity Payments</title>
+        <meta name="description" content="Pay for electricity instantly with Kobopay" />
+      </Head>
 
-      {/* DISCO SELECTION SECTION */}
-      <section id="discos" className="py-20 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-bold text-gray-900">Select Your Disco</h2>
-            <p className="mt-4 text-gray-600">Choose your electricity distribution company to begin</p>
+     <Navbar />
+
+      {/* --- Hero Section --- */}
+      <section className="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden">
+        {/* Background Glow */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gray-900 border border-gray-700 mb-8">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+            </span>
+            <span className="text-xs font-semibold text-gray-300 uppercase tracking-wide">Live 24/7 Payments</span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-            {DISCOS.map((disco) => (
-              <button
-                key={disco.id}
-                onClick={() => handleDiscoClick(disco)}
-                className="group relative bg-white border border-gray-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col items-center justify-center h-64 w-full"
-              >
-                <div className={`w-24 h-24 ${disco.color} rounded-full flex items-center justify-center text-white font-bold text-2xl mb-4 shadow-lg group-hover:scale-110 transition duration-300`}>
-                  {/* Using Initials as placeholder for logos */}
-                  {disco.name.substring(0, 3).toUpperCase()}
-                </div>
-                <h3 className="text-xl font-bold text-gray-800 group-hover:text-blue-600 transition">
-                  {disco.name}
-                </h3>
-                <span className="mt-2 text-sm text-gray-500 opacity-0 group-hover:opacity-100 transition">
-                  Click to Pay
-                </span>
-              </button>
-            ))}
-          </div>
+          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
+            Make Electricity <br className="hidden md:block" />
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+              Payments Instantly
+            </span>
+          </h1>
+          
+          <p className="mt-4 max-w-2xl mx-auto text-xl text-gray-400 mb-10">
+            Seamlessly purchase units for Aba Power, PHEDC, and EEDC. 
+            Get your token in seconds.
+          </p>
+
+          <a 
+            href="#discos"
+            className="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white transition-all duration-200 bg-blue-600 rounded-full hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/30"
+          >
+            Start Payment
+          </a>
         </div>
       </section>
 
-      {/* BENEFITS SECTION */}
-      <section id="benefits" className="py-20 bg-gray-50">
+      {/* --- Discos Section --- */}
+      <section id="discos" className="py-20 bg-gray-950">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-gray-900">Benefits of Using Kobopay</h2>
-            <p className="mt-4 text-gray-600">Why thousands of Nigerians trust us for their power needs</p>
+            <h2 className="text-3xl font-bold text-white mb-4">Select Your Provider</h2>
+            <p className="text-gray-400">Choose your distribution company to proceed</p>
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {BENEFITS.map((benefit, idx) => (
-              <div key={idx} className="bg-white p-8 rounded-xl shadow-sm border border-gray-100 hover:shadow-md transition">
-                <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-6 text-blue-600">
-                  <benefit.icon size={24} />
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {DISCOS.map((disco) => (
+              <div 
+                key={disco.id}
+                onClick={() => setSelectedDisco(disco.name)}
+                className="group cursor-pointer relative bg-gray-900 border border-gray-800 rounded-2xl p-8 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className={`w-16 h-16 rounded-full ${disco.color} flex items-center justify-center mb-6 shadow-lg`}>
+                  <Zap className="text-white" fill="currentColor" />
                 </div>
-                <h3 className="text-lg font-bold text-gray-900 mb-2">{benefit.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{benefit.desc}</p>
+                <h3 className="text-2xl font-bold text-white mb-2">{disco.name}</h3>
+                <p className="text-gray-500 text-sm mb-6">Click to buy units instantly</p>
+                <div className="flex items-center text-blue-400 text-sm font-medium group-hover:text-blue-300">
+                  Pay Now <span className="ml-2 group-hover:translate-x-1 transition">→</span>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* WHATSAPP CTA */}
-      <section className="py-16 bg-green-50 border-y border-green-100">
-        <div className="max-w-7xl mx-auto px-4 text-center">
-          <div className="inline-flex items-center justify-center p-4 bg-green-100 rounded-full mb-6">
-            <Phone className="h-8 w-8 text-green-600" />
+      {/* --- Benefits Section --- */}
+      <section id="benefits" className="py-20 bg-black">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-white mb-4">Why Kobopay?</h2>
+            <p className="text-gray-400">Experience the future of utility payments</p>
           </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-4">Buy on WhatsApp</h2>
-          <p className="text-gray-600 mb-8 max-w-lg mx-auto">
-            Prefer chatting? You can purchase your token directly through our automated WhatsApp bot.
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+            {BENEFITS.map((item, idx) => (
+              <div key={idx} className="flex gap-4">
+                <div className="flex-shrink-0">
+                  <div className="w-12 h-12 bg-gray-900 rounded-xl flex items-center justify-center border border-gray-800">
+                    <item.icon className="text-blue-500" size={24} />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+                  <p className="text-gray-400 leading-relaxed">{item.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- WhatsApp CTA --- */}
+      <section className="py-20 bg-gradient-to-b from-gray-900 to-black border-y border-gray-900">
+        <div className="max-w-4xl mx-auto px-4 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Need Help? Buy on WhatsApp</h2>
+          <p className="text-gray-400 mb-8 text-lg">
+            Chat with our bot or support team directly to purchase units or resolve issues.
           </p>
-          <a href="https://wa.me/23490400000000" className="inline-flex items-center bg-green-600 text-white px-8 py-3 rounded-full font-bold hover:bg-green-700 transition shadow-lg">
-            Chat on WhatsApp (090400000000)
+          <a 
+            href="https://wa.me/23490400000000" 
+            target="_blank" 
+            rel="noreferrer"
+            className="inline-flex items-center gap-3 bg-green-600 hover:bg-green-500 text-white font-bold py-4 px-8 rounded-full transition-all"
+          >
+            <Phone fill="currentColor" />
+            <span>Chat on WhatsApp (090400000000)</span>
           </a>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-gray-900 text-gray-300 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8">
+      {/* --- Footer --- */}
+      <footer className="bg-black pt-16 pb-8 border-t border-gray-900 text-gray-400 text-sm">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           <div className="col-span-1 md:col-span-2">
-            <h3 className="text-white text-xl font-bold mb-4 flex items-center gap-2">
-              <Zap className="text-blue-500" /> Kobopay
-            </h3>
-            <p className="max-w-xs text-sm leading-relaxed">
-              Kobopay makes it easy for you to purchase electricity units for your prepaid meters securely and instantly.
+            <div className="flex items-center gap-2 mb-4">
+              <Zap className="text-blue-500" size={20} />
+              <span className="text-xl font-bold text-white">Kobopay</span>
+            </div>
+            <p className="max-w-xs leading-relaxed mb-6">
+              Simplifying electricity payments across Nigeria. Fast, secure, and reliable service 24/7.
             </p>
           </div>
+          
           <div>
-            <h4 className="text-white font-bold mb-4">Company</h4>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="#" className="hover:text-white transition">About us</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Contact</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Careers</Link></li>
+            <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-xs">Company</h4>
+            <ul className="space-y-3">
+              <li><a href="#" className="hover:text-blue-400 transition">About Us</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition">Contact</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition">Careers</a></li>
             </ul>
           </div>
+
           <div>
-            <h4 className="text-white font-bold mb-4">Legal</h4>
-            <ul className="space-y-2 text-sm">
-              <li><Link href="#" className="hover:text-white transition">Terms of Service</Link></li>
-              <li><Link href="#" className="hover:text-white transition">Privacy Policy</Link></li>
+            <h4 className="text-white font-bold mb-4 uppercase tracking-wider text-xs">Legal</h4>
+            <ul className="space-y-3">
+              <li><a href="#" className="hover:text-blue-400 transition">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-blue-400 transition">Privacy Policy</a></li>
             </ul>
           </div>
         </div>
-        <div className="max-w-7xl mx-auto px-4 mt-12 pt-8 border-t border-gray-800 text-center text-sm">
-          ©️ 2025 Kobopay. All rights reserved.
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-gray-900 flex flex-col md:flex-row justify-between items-center gap-4">
+          <p>© 2025 Kobopay. All rights reserved.</p>
+          <div className="flex gap-4">
+            {/* Social icons placeholders */}
+          </div>
         </div>
       </footer>
 
-      {/* MODAL */}
-      <PaymentModal 
-        disco={selectedDisco} 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-      />
-    </main>
+      {/* --- Logic Modal --- */}
+      {selectedDisco && (
+        <PaymentModal 
+          isOpen={!!selectedDisco} 
+          onClose={() => setSelectedDisco(null)} 
+          discoName={selectedDisco} 
+        />
+      )}
+    </div>
   );
 }

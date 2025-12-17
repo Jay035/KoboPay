@@ -1,121 +1,131 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Disco } from '@/types';
-import { X, Loader2, CheckCircle } from 'lucide-react';
+import React, { useState } from "react";
+import { X, Loader2, CheckCircle, Smartphone, Zap } from "lucide-react";
 
 interface PaymentModalProps {
-  disco: Disco | null;
   isOpen: boolean;
   onClose: () => void;
+  discoName: string;
 }
 
-export default function PaymentModal({ disco, isOpen, onClose }: PaymentModalProps) {
-  const [meterNo, setMeterNo] = useState('');
-  const [amount, setAmount] = useState('');
+export default function PaymentModal({ isOpen, onClose, discoName }: PaymentModalProps) {
+  const [meterNo, setMeterNo] = useState("");
+  const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState<string | null>(null);
 
-  if (!isOpen || !disco) return null;
+  if (!isOpen) return null;
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handlePay = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    // SIMULATE API CALL
-    // In a real app, you would fetch('/api/pay', { body: JSON.stringify({ discoId: disco.id, meterNo, amount }) })
+    // ---------------------------------------------------------
+    // INTEGRATION NOTE:
+    // Replace this setTimeout with your actual API fetch call.
+    // Example:
+    // const res = await fetch('/api/pay', { method: 'POST', body: ... })
+    // ---------------------------------------------------------
+    
     setTimeout(() => {
-      setLoading(false);
-      // Generate a fake token for demo
-      const fakeToken = Math.floor(1000 + Math.random() * 9000) + '-' + Math.floor(1000 + Math.random() * 9000) + '-' + Math.floor(1000 + Math.random() * 9000) + '-' + Math.floor(1000 + Math.random() * 9000);
+      // Simulate success and generate a random token
+      const fakeToken = Math.floor(1000 + Math.random() * 9000) + "-" + 
+                        Math.floor(1000 + Math.random() * 9000) + "-" + 
+                        Math.floor(1000 + Math.random() * 9000) + "-" + 
+                        Math.floor(1000 + Math.random() * 9000);
+      
       setSuccess(fakeToken);
+      setLoading(false);
     }, 2000);
   };
 
   const reset = () => {
     setSuccess(null);
-    setMeterNo('');
-    setAmount('');
+    setMeterNo("");
+    setAmount("");
     onClose();
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
-      <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+      <div className="w-full max-w-md bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl overflow-hidden relative">
         
-        {/* Header */}
-        <div className={`p-6 ${disco.color} text-white flex justify-between items-center`}>
-          <h3 className="text-xl font-bold">Pay {disco.name}</h3>
-          <button onClick={reset} className="hover:bg-white/20 p-1 rounded-full transition">
-            <X size={24} />
-          </button>
-        </div>
+        {/* Close Button */}
+        <button onClick={reset} className="absolute top-4 right-4 text-gray-400 hover:text-white transition">
+          <X size={24} />
+        </button>
 
-        {/* Content */}
-        <div className="p-6">
+        <div className="p-8">
           {success ? (
-            <div className="text-center py-6">
-              <div className="mx-auto w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mb-4">
-                <CheckCircle size={32} />
+            <div className="text-center space-y-4">
+              <div className="flex justify-center text-green-500 mb-4">
+                <CheckCircle size={64} />
               </div>
-              <h4 className="text-2xl font-bold text-gray-900 mb-2">Payment Successful!</h4>
-              <p className="text-gray-500 mb-6">Your token has been generated.</p>
-              
-              <div className="bg-gray-100 p-4 rounded-lg mb-6 border border-dashed border-gray-300">
-                <span className="block text-sm text-gray-500 uppercase tracking-wide">Token</span>
-                <span className="block text-2xl font-mono font-bold tracking-widest text-gray-800">{success}</span>
+              <h3 className="text-2xl font-bold text-white">Payment Successful!</h3>
+              <p className="text-gray-400">Here is your electricity token:</p>
+              <div className="bg-gray-800 p-4 rounded-lg border border-green-500/30">
+                <p className="text-2xl font-mono text-green-400 tracking-widest font-bold">
+                  {success}
+                </p>
               </div>
-              
-              <button onClick={reset} className="w-full bg-gray-900 text-white py-3 rounded-lg font-bold hover:bg-gray-800">
-                Close
+              <p className="text-sm text-gray-500">A receipt has been sent to your history.</p>
+              <button
+                onClick={reset}
+                className="w-full mt-6 bg-green-600 hover:bg-green-500 text-white font-bold py-3 rounded-xl transition"
+              >
+                Done
               </button>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Meter Number</label>
-                <input 
-                  type="number" 
-                  required
-                  value={meterNo}
-                  onChange={(e) => setMeterNo(e.target.value)}
-                  placeholder="e.g. 01011500445"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                />
+            <>
+              <div className="mb-6 flex items-center gap-3">
+                <div className="p-3 bg-blue-600/20 rounded-lg text-blue-400">
+                  <Zap size={24} />
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-white">Pay {discoName}</h3>
+                  <p className="text-sm text-gray-400">Instant Token Delivery</p>
+                </div>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Amount (₦)</label>
-                <input 
-                  type="number" 
-                  required
-                  min="500"
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  placeholder="e.g. 5000"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition"
-                />
-              </div>
+              <form onSubmit={handlePay} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">Meter Number</label>
+                  <div className="relative">
+                    <Smartphone className="absolute left-3 top-3 text-gray-500" size={18} />
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g. 45020493821"
+                      value={meterNo}
+                      onChange={(e) => setMeterNo(e.target.value)}
+                      className="w-full bg-gray-800 border border-gray-700 text-white pl-10 pr-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                    />
+                  </div>
+                </div>
 
-              <div className="bg-blue-50 p-3 rounded-lg text-sm text-blue-800">
-                Connecting to <strong>{disco.name}</strong> API securely.
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-400 mb-1">Amount (₦)</label>
+                  <input
+                    type="number"
+                    required
+                    placeholder="Min. 1000"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="w-full bg-gray-800 border border-gray-700 text-white px-4 py-3 rounded-xl focus:ring-2 focus:ring-blue-500 focus:outline-none transition"
+                  />
+                </div>
 
-              <button 
-                type="submit" 
-                disabled={loading}
-                className={`w-full py-3.5 rounded-lg font-bold text-white shadow-md transition
-                  ${loading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
-              >
-                {loading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <Loader2 className="animate-spin" /> Processing...
-                  </span>
-                ) : (
-                  `Pay ₦${amount || '0.00'}`
-                )}
-              </button>
-            </form>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full bg-blue-600 hover:bg-blue-500 disabled:bg-blue-800 disabled:cursor-not-allowed text-white font-bold py-3 rounded-xl transition flex justify-center items-center gap-2 mt-4"
+                >
+                  {loading ? <Loader2 className="animate-spin" /> : "Pay Now"}
+                </button>
+              </form>
+            </>
           )}
         </div>
       </div>
