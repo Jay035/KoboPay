@@ -1,15 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import {
-  X,
-  Loader2,
-  CheckCircle,
-  Smartphone,
-  Zap,
-  User,
-  Mail,
-} from "lucide-react";
+import { X, Loader2, CheckCircle } from "lucide-react";
 
 interface PaymentModalProps {
   isOpen: boolean;

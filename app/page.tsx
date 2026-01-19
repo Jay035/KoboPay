@@ -98,7 +98,7 @@ export default function Home() {
 
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mb-6">
             Make Electricity <br className="hidden md:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-500">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-400 to-purple-500">
               Payments Instantly
             </span>
           </h1>
@@ -196,7 +196,7 @@ export default function Home() {
       </section>
 
       {/* --- WhatsApp CTA --- */}
-      <section className="py-20 bg-gradient-to-b from-gray-900 to-black border-y border-gray-900">
+      <section className="py-20 bg-linear-to-b from-gray-900 to-black border-y border-gray-900">
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">
             Need Help? Buy on WhatsApp

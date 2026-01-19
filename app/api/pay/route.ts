@@ -8,7 +8,6 @@ export async function POST(req: Request) {
     variation_code,
     amount,
     phone,
-    email,
   } = await req.json();
 
   const res = await fetch(`${process.env.VTPASS_BASE_URL}/pay`, {
